@@ -360,10 +360,10 @@ footer{background:var(--laurel-d);color:#cfd6c9;padding:56px 0 28px}
       <div class="reveal">
         <span class="eyebrow">اطلب الآن</span>
         <h2>طلبك بيوصلنا مباشرة على واتساب</h2>
-        <p class="lead">اختار المنتج والكمية، اكتب اسمك الثلاثي ومدينتك واختار شركة الشحن، وبيفتح واتساب برسالة جاهزة. منأكد معك باقي التفاصيل بالمحادثة.</p>
+        <p class="lead">اختار المنتج والكمية، اكتب اسمك الثلاثي ورقم هاتفك ومدينتك واختار شركة الشحن، وبيفتح واتساب برسالة جاهزة. منأكد معك باقي التفاصيل بالمحادثة.</p>
         <ol class="steps">
           <li>اختار النسخة والكمية.</li>
-          <li>اكتب اسمك الثلاثي ومدينتك، واختار شركة الشحن.</li>
+          <li>اكتب اسمك الثلاثي ورقم هاتفك ومدينتك، واختار شركة الشحن.</li>
           <li>اضغط «أرسل الطلب» وابعت الرسالة من واتساب.</li>
         </ol>
       </div>
@@ -379,6 +379,7 @@ footer{background:var(--laurel-d);color:#cfd6c9;padding:56px 0 28px}
           <div class="stepper"><button type="button" data-d="-1" aria-label="إنقاص النسائي">−</button><output>0</output><button type="button" data-d="1" aria-label="زيادة النسائي">+</button></div>
         </div>
         <label>الاسم الثلاثي<input name="name" autocomplete="name" required placeholder="الاسم والأب والكنية"></label>
+        <label>رقم الهاتف<input name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" style="text-align:right" required placeholder="09xx xxx xxx"></label>
         <label>المدينة<input name="city" autocomplete="address-level2" required placeholder="مثلاً: حماة"></label>
         <fieldset>
           <legend>شركة الشحن</legend>
@@ -454,12 +455,13 @@ form.addEventListener("submit", e => {
   const d = Object.fromEntries(new FormData(form));
   if (qty.men + qty.women === 0) { err.textContent = "اختار منتج واحد على الأقل."; return; }
   if (d.name.trim().split(/\s+/).length < 3) { err.textContent = "اكتب اسمك الثلاثي لنكمّل الطلب."; return; }
+  if (d.phone.replace(/\D/g, "").length < 9) { err.textContent = "اكتب رقم هاتفك لنتواصل معك."; return; }
   if (!d.city.trim()) { err.textContent = "اكتب مدينتك لنكمّل الطلب."; return; }
   if (!d.ship) { err.textContent = "اختار شركة الشحن: القدموس أو مسارات."; return; }
   err.textContent = "";
   const lines = ["مرحباً Garolive 🌿، بدي اطلب:"];
   for (const k in qty) if (qty[k]) lines.push(`• ${names[k]} × ${qty[k]}`);
-  lines.push(`المجموع: ${(qty.men + qty.women) * PRICE}$`, "", `الاسم الثلاثي: ${d.name.trim()}`, `المدينة: ${d.city.trim()}`, `شركة الشحن: ${d.ship}`);
+  lines.push(`المجموع: ${(qty.men + qty.women) * PRICE}$`, "", `الاسم الثلاثي: ${d.name.trim()}`, `رقم الهاتف: ${d.phone.trim()}`, `المدينة: ${d.city.trim()}`, `شركة الشحن: ${d.ship}`);
   window.open(`https://wa.me/${WA}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
 });
 
